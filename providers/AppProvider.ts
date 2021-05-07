@@ -1,6 +1,5 @@
 import { ApplicationContract } from '@ioc:Adonis/Core/Application'
 import { Channel, connect, Message } from 'amqplib'
-import { DateTime } from 'luxon';
 
 export default class AppProvider {
 
