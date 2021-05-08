@@ -23,14 +23,14 @@ import Database from '@ioc:Adonis/Lucid/Database'
 import Rabbit from 'App/Services/Rabbit'
 import { DateTime } from 'luxon'
 
-Route.get('/testes', async ({ view }) => {
-  const rabit = await Rabbit.init()
+// Route.get('/testes', async ({ view }) => {
+//   const rabit = await Rabbit.init()
 
-  rabit.publish('inss', 'processo', 'by exchange')
-  rabit.sendToQueue('processo', 'by direct queue')
+//   rabit.publish('inss', 'processo', 'by exchange')
+//   rabit.sendToQueue('processo', 'by direct queue')
 
-  return {msg: 'postada'}
-})
+//   return {msg: 'postada'}
+// })
 
 
 Route.get('/', async ({ view }) => {
