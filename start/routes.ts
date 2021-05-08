@@ -20,13 +20,20 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 import Database from '@ioc:Adonis/Lucid/Database'
+import Rabbit from 'App/Services/Rabbit'
 import { DateTime } from 'luxon'
 
-Route.get('/', async ({ view }) => {
-  return view.render('welcome')
+Route.get('/testes', async ({ view }) => {
+  const rabit = await Rabbit.init()
+
+  rabit.publish('inss', 'processo', 'by exchange')
+  rabit.sendToQueue('processo', 'by direct queue')
+
+  return {msg: 'postada'}
 })
 
-Route.get('/despachos', async ({ view }) => {
+
+Route.get('/', async ({ view }) => {
 
   const start = DateTime.local().startOf('month').toSQLDate()
   const end = DateTime.local().toSQLDate()
