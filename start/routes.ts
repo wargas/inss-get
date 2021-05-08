@@ -20,7 +20,6 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 import Database from '@ioc:Adonis/Lucid/Database'
-import Rabbit from 'App/Services/Rabbit'
 import { DateTime } from 'luxon'
 
 // Route.get('/testes', async ({ view }) => {
