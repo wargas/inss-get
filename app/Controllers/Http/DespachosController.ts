@@ -1,4 +1,4 @@
-// import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 import Database from "@ioc:Adonis/Lucid/Database"
 import { DateTime } from "luxon"
@@ -7,82 +7,73 @@ import Rabbit from "App/Services/Rabbit";
 
 export default class DespachosController {
 
-  async index({ view }) {
-    const start = DateTime.local().startOf('month').toSQLDate()
-    const end = DateTime.local().toSQLDate()
+  async index({ view, request }: HttpContextContract) {
+
+    const {start: qsStart, end: qsEnd} = request.qs();
+
+    let start = DateTime.local().startOf('month')
+    let end = DateTime.local()
+
+    if(qsStart) {
+      start = DateTime.fromFormat(qsStart, 'dd/MM/yyyy')
+    }
+
+    if(qsEnd) {
+      end = DateTime.fromFormat(qsEnd, 'dd/MM/yyyy')
+    }
 
 
-    const despachos = await Database.from('despachos')
-      .where('siape', '2997532')
-      .where('title', 'regexp', 'concluir|exigencia')
-      .whereBetween('data', [start, end])
+    const pontos = await Database.from('pontos')
 
-    const exigencias_all = await Database.from('despachos')
-      .select('protocolo')
-      .min('data', 'primeira')
-      .where('title', 'like', '%exigencia%')
-      .groupBy('protocolo')
 
-    const exigencias_all_map = new Map()
+    const concluidas = (await Database.from('tarefas')
+      .groupBy('especie')
+      .select('especie')
+      .count('id', 'total')
+      .where('siapeConclusao', '2997532')
+      .whereBetween('dataConclusao', [start.minus({day: 1}).toSQLDate(), end.plus({day: 1}).toSQLDate()]))
+      .map(item => {
 
-    exigencias_all.forEach(item => {
-      exigencias_all_map.set(item.protocolo, DateTime.fromJSDate(item.primeira));
-    })
+        const ponto = pontos.find(p => p.especie === item.especie)
 
-    const pontos = despachos.map(despacho => {
-      let tipo = ""
-      if (despacho.title.includes('concluir')) {
-        tipo = 'conclusao'
-      } else if (despacho.title.includes('exigencia')) {
-        const primeira: DateTime = exigencias_all_map.get(despacho.protocolo);
-        const current = DateTime.fromJSDate(despacho.data);
+        const total = ponto.conclusao * item.total;
 
-        const diff = primeira.diff(current, 'day').days
+        return {...item, total, exigencias: 0, conclusoes: item.total}
+      })
 
-        if (diff >= 0) {
-          tipo = 'exigencia'
-        }
+    const exigencias = (await Database.from('tarefas')
+      .groupBy('especie')
+      .select('especie')
+      .count('id', 'total')
+      .where('siapeExigencia', '2997532')
+      .whereBetween('primeiraExigencia', [start.minus({day: 1}).toSQLDate(), end.plus({day: 1}).toSQLDate()]))
+      .map(item => {
 
-      }
+        const ponto = pontos.find(p => p.especie === item.especie)
+        const total = ponto.exigencia * item.total;
 
-      return { ...despacho, tipo }
-    }).map(despacho => {
-      let pontos = 0
-      if (despacho.tipo === 'conclusao') {
-        if (despacho.especie === 'AUXILIO-DOENCA COM DOCUMENTO MEDICO') {
-          pontos = 0.6
-        }
-        if (despacho.especie === 'SALARIO-MATERNIDADE RURAL') {
-          pontos = 0.75
-        }
-      }
+        return {...item, total, exigencias: item.total, conclusoes: 0}
+      })
 
-      if (despacho.tipo === 'exigencia') {
-        pontos = 0.2
-      }
+    const tarefas = [...exigencias, ...concluidas]
 
-      return { ...despacho, pontos }
-    })
+    const totais = tarefas.reduce((acc, item) => {
 
-    const total = pontos.reduce((acc, d) => {
-      acc.total = acc.total + d.pontos
+      acc.conclusoes = acc.conclusoes + item.conclusoes
+      acc.exigencias = acc.exigencias + item.exigencias
+      acc.total = acc.total + item.total
 
-      if (d.tipo === 'conclusao' || d.tipo === 'exigencia') {
-        acc[d.tipo] = acc[d.tipo] + d.pontos
-
-        acc.processos = acc.processos + 1
-      }
-
-      return acc
+      return acc;
     }, {
-      total: 0,
-      conclusao: 0,
-      exigencia: 0,
-      processos: 0
+      conclusoes: 0,
+      exigencias: 0,
+      total: 0
     })
 
 
-    return view.render("despachos", { total })
+    return view.render("despachos", { tarefas, totais,
+        start: start.toFormat('dd/MM/yyyy'),
+        end: end.toFormat('dd/MM/yyyy')  })
   }
 
   async pontos({view}) {

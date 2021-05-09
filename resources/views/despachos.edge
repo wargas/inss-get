@@ -2,46 +2,63 @@
 @set('title', 'Gerenciar Pontos')
 
 @section('content')
-<div class="row">
-  <div class="col">
-    <div class="card shadow-sm">
-      <div class="card-body text-center">
-        <h1 class="card-title text-success text-bold">
-          {{total.total.toFixed(2)}}
-       </h1>
-       <p class="text-muted mb-0">total</p>
+
+  <div class="card shadow">
+    <form action="./" method="get">
+      <div class="card-body d-flex border-bottom">
+        <div class="ms-auto">
+          <label for="">Inicio</label>
+          <input name="start" value="{{start}}" id="start" type="text" class="form-control">
+        </div>
+        <div class="ms-3">
+          <label for="">Fim</label>
+          <input name="end" value="{{end}}" id="end" type="text" class="form-control">
+        </div>
+        <div class="ms-3 d-flex align-items-end">
+          <button type="submit" class="btn btn-outline-info">
+            <i class="bi bi-search"></i>
+          </button>
+        </div>
       </div>
+  </form>
+    <div class="card-body p-0">
+      <table class="table m-0">
+        <thead>
+          <tr>
+            <th>Especie</th>
+            <th class="text-end">Conclusões</th>
+            <th class="text-end">Exigências</th>
+            <th class="text-end">Pontos</th>
+          </tr>
+        </thead>
+        <tbody>
+          @each(item in tarefas)
+            <tr>
+              <td>{{item.especie}}</td>
+              <td class="text-end">{{String(item.conclusoes).padStart(3, '0')}}</td>
+              <td class="text-end">{{String(item.exigencias).padStart(3, '0')}}</td>
+              <td class="text-end">{{item.total.toFixed(2)}}</td>
+            </tr>
+          @endeach
+          <tr class="bg-info">
+            <td></td>
+            <td class="text-end text-white">{{String(totais.conclusoes).padStart(3, '0')}}</td>
+            <td class="text-end text-white">{{String(totais.exigencias).padStart(3, '0')}}</td>
+            <td class="text-end text-white">{{totais.total.toFixed(2)}}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
-  <div class="col">
-    <div class="card shadow-sm">
-      <div class="card-body text-center">
-        <h1 class="card-title">
-          {{total.conclusao.toFixed(2)}}
-       </h1>
-       <p class="text-muted mb-0">conclusao</p>
-      </div>
-    </div>
-  </div>
-  <div class="col">
-    <div class="card shadow-sm">
-      <div class="card-body text-center">
-        <h1 class="card-title">
-          {{total.exigencia.toFixed(2)}}
-       </h1>
-       <p class="text-muted mb-0">exigência</p>
-      </div>
-    </div>
-  </div>
-  <div class="col">
-    <div class="card shadow-sm">
-      <div class="card-body text-center">
-        <h1 class="card-title">
-          {{total.processos}}
-       </h1>
-       <p class="text-muted mb-0">processos</p>
-      </div>
-    </div>
-  </div>
-</div>
+
+@end
+@section('js')
+  <script>
+    const inputStart = document.getElementById('start')
+    const inputEnd = document.getElementById('end')
+
+    VMasker(inputStart).maskPattern('99/99/9999')
+    VMasker(inputEnd).maskPattern('99/99/9999')
+
+  </script>
 @end
