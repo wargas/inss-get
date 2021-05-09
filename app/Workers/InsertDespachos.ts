@@ -20,7 +20,6 @@ const InsertDespachos = async (msg: Message, channel: Channel) => {
       }
     }).filter(d => !ids.has(d.despacho_id))
 
-
     if (despachos.length > 0) {
       await Database.table('despachos').multiInsert(despachos)
     }

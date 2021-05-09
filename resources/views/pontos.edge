@@ -1,0 +1,60 @@
+@layout('layouts/main')
+@set('title', 'Gerenciar Pontos')
+
+@section('content')
+  <h1>Especies</h1>
+  <div class="card shadow">
+    <div class="card-body p-0">
+      <table class="table m-0">
+        <thead>
+          <tr>
+            <th>Especie</th>
+            <th colspan="2">Pontos</th>
+          </tr>
+        </thead>
+          <tbody>
+            @each(especie in especies)
+            <tr>
+              <td>{{especie}}</td>
+              <td>0,00</td>
+              <td class="text-end">
+                <button onclick="openEditEspecie('{{especie}}')" class="btn btn-sm">
+                  editar
+                </button>
+              </td>
+            </tr>
+          @endeach
+          </tbody>
+      </table>
+    </div>
+
+    <div class="modal" id="modal-edit-especie" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">EDITAR ESPECIE</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form action="/especies" method="post">
+              <div class="form-group">
+                <label for="">Nome</label>
+                <input id="inputEspecieNome" type="text" class="form-control">
+              </div>
+              <div class="form-group mt-3">
+                <label for="">Pontos</label>
+                <input id="inputEspeciePontos" type="text" class="form-control">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-primary">Salvar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+@end

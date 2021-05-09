@@ -1,6 +1,7 @@
 import { ApplicationContract } from '@ioc:Adonis/Core/Application'
 import Rabbit from 'App/Services/Rabbit'
 import InsertDespachos from 'App/Workers/InsertDespachos'
+import SalvarTarefa from 'App/Workers/SalvarTarefa'
 
 export default class AppProvider {
 
@@ -19,6 +20,7 @@ export default class AppProvider {
     const rabbit = await Rabbit.init()
 
     rabbit.addListener('processo', InsertDespachos)
+    rabbit.addListener('salvar-tarefa', SalvarTarefa)
   }
 
   public async shutdown() {
