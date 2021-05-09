@@ -26,8 +26,8 @@ const InsertDespachos = async (msg: Message, channel: Channel) => {
 
     channel.ack(msg)
   } catch (error) {
-    console.log('error')
-    channel.reject(msg)
+    console.log(error)
+    channel.ack(msg)
   }
 }
 

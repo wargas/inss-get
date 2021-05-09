@@ -17,7 +17,7 @@ export default async function name(msg: Message, channel: Channel) {
 
     } else {
       const { despachos, adicionais, ...data } = tarefa
-      const newTarefa = await Database.table('tarefas').insert(data)
+      await Database.table('tarefas').insert(data)
     }
 
     channel.ack(msg)

@@ -2,7 +2,6 @@
 
 import Database from "@ioc:Adonis/Lucid/Database"
 import { DateTime } from "luxon"
-import fs from 'fs';
 import HtmlToJson from "App/Workers/HtmlToJson";
 import Rabbit from "App/Services/Rabbit";
 

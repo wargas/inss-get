@@ -1,5 +1,4 @@
 import cheerio from 'cheerio';
-import fs from 'fs'
 import { DateTime } from 'luxon';
 
 export default async function (html: string) {
