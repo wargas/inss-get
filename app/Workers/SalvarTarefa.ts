@@ -9,7 +9,7 @@ export default async function name(msg: Message, channel: Channel) {
 
 
     if (existe > 0) {
-      const { despachos, adicionais, protocolo ,...data } = tarefa
+      const { despachos, adicionais, protocolo, ...data } = tarefa
 
       await Database.from('tarefas')
         .where('protocolo', protocolo)
@@ -20,9 +20,11 @@ export default async function name(msg: Message, channel: Channel) {
       await Database.table('tarefas').insert(data)
     }
 
+    console.log('receive msg')
+
     channel.ack(msg)
   } catch (error) {
-    channel.reject(msg)
+    channel.ack(msg)
   }
 
 }

@@ -27,8 +27,23 @@ export function dadosBasicos(html) {
 
   const [left, right] = $('.panel-heading>.row>.col-sm-12')
 
-  const especie = removeAcentos($($(left).find('.col-sm-12 p')[0]).text().trim().toUpperCase())
-  const aps = $($(left).find('.col-sm-12 p')[2]).text().trim().replace(/^(\d{1,}) - (.*)$/, "$1")
+  const leftMap = new Map()
+
+  leftMap.set('SERVICO', '')
+  leftMap.set('UNIDADE', '')
+  leftMap.set('AGENCIA DE MANUTENCAO SOLICITADA', '')
+
+  Array.from($(left).find('.col-sm-12')).forEach(item => {
+    const small = removeAcentos($(item).find('small>label').text().trim()).toUpperCase()
+    const valor = $(item).find('p').text().trim()
+
+    leftMap.set(small, valor);
+  })
+
+  const especie = removeAcentos(leftMap.get('SERVICO').toUpperCase())
+  const unidade = leftMap.get('UNIDADE').replace(/\D/g, "")
+  const aps = leftMap.get('AGENCIA DE MANUTENCAO SOLICITADA').replace(/^(\d{1,}) - (.*)$/, "$1")
+
 
   const rightMap = new Map()
   rightMap.set('Status', 'status')
@@ -57,7 +72,7 @@ export function dadosBasicos(html) {
   detalhes.der = toSQL(detalhes.der)
   detalhes.atualizacao = toSQL(detalhes.atualizacao)
 
-  return { especie, aps, ...detalhes }
+  return { especie, unidade, aps, ...detalhes }
 }
 
 export function camposAdicionais(html) {

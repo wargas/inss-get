@@ -88,8 +88,9 @@ export default class DespachosController {
     return view.render("pontos", {especies: especies.map(item => item.especie)})
   }
 
-  async store({request}) {
-    const json = await HtmlToJson(request.raw())
+  async store({request}: HttpContextContract) {
+
+    const json = await HtmlToJson(request.raw() || '')
 
     await Rabbit.publish('inss', 'salvar-tarefa', JSON.stringify(json))
 
