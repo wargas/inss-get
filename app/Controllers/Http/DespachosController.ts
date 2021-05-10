@@ -12,7 +12,7 @@ export default class DespachosController {
     const {start: qsStart, end: qsEnd} = request.qs();
 
     let start = DateTime.local().startOf('month')
-    let end = DateTime.local()
+    let end = DateTime.local().endOf('month')
 
     if(qsStart) {
       start = DateTime.fromFormat(qsStart, 'dd/MM/yyyy')
@@ -22,16 +22,19 @@ export default class DespachosController {
       end = DateTime.fromFormat(qsEnd, 'dd/MM/yyyy')
     }
 
-
     const pontos = await Database.from('pontos')
 
+    const interval: [string, string] = [
+      start.set({hour: 0, minute: 0, second: 1}).toSQL(),
+      end.set({hour: 23, minute: 59, second: 59}).toSQL()
+    ]
 
     const concluidas = (await Database.from('tarefas')
       .groupBy('especie')
       .select('especie')
       .count('id', 'total')
       .where('siapeConclusao', '2997532')
-      .whereBetween('dataConclusao', [start.minus({day: 1}).toSQLDate(), end.plus({day: 1}).toSQLDate()]))
+      .whereBetween('dataConclusao', interval))
       .map(item => {
 
         const ponto = pontos.find(p => p.especie === item.especie)
@@ -46,7 +49,7 @@ export default class DespachosController {
       .select('especie')
       .count('id', 'total')
       .where('siapeExigencia', '2997532')
-      .whereBetween('primeiraExigencia', [start.minus({day: 1}).toSQLDate(), end.plus({day: 1}).toSQLDate()]))
+      .whereBetween('primeiraExigencia', interval))
       .map(item => {
 
         const ponto = pontos.find(p => p.especie === item.especie)
