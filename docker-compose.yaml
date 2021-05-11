@@ -1,0 +1,18 @@
+version: '3'
+services:
+  app:
+    image: node
+    ports:
+      - 3334:3334
+    volumes:
+      - C:\\projetos\\inss:/usr/app
+    working_dir: /usr/app
+    entrypoint: npm run dev
+  database:
+    image: mysql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: wrgs2703
+      MYSQL_USER: wargas
+      MYSQL_PASSWORD: wrgs2703

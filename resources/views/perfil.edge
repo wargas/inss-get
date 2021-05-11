@@ -1,0 +1,27 @@
+@layout('layouts/main')
+@set('title', 'Gerenciar Pontos')
+
+@section('content')
+  <h2>Perfil</h2>
+
+  <div class="card shadow-sm mb-3">
+    <div class="list-group">
+      <div class="list-group-item">
+        <b>Nome</b>: <span class="text-muted"> {{session.get('user.nome')}}</span>
+      </div>
+      <div class="list-group-item">
+        <b>Email</b>: <span class="text-muted"> {{session.get('user.email')}}</span>
+      </div>
+      <div class="list-group-item">
+        <b>Matrícula</b>: <span class="text-muted"> {{session.get('user.matricula')}}</span>
+      </div>
+      <div class="list-group-item">
+        <b>CPF</b>: <span class="text-muted"> {{session.get('user.cpf')}}</span>
+      </div>
+      <div class="list-group-item">
+        <b>Cidade</b>: <span class="text-muted"> {{session.get('user.cidade')}}</span>
+      </div>
+    </div>
+  </div>
+
+@end

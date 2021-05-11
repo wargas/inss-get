@@ -22,8 +22,10 @@ import Route from '@ioc:Adonis/Core/Route'
 
 
 
-Route.get('/', 'DespachosController.index')
-Route.get('/pontos', 'DespachosController.pontos')
+Route.get('/', 'DespachosController.index').middleware('auth')
+Route.on('/perfil').render('perfil').middleware('auth')
+Route.get('/pontos', 'DespachosController.pontos').middleware('auth')
 Route.post('/save', 'DespachosController.store')
 
-
+Route.get('/auth', 'AuthController.login')
+Route.post('/auth', 'AuthController.doLogin')

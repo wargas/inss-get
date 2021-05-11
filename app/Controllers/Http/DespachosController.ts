@@ -7,7 +7,9 @@ import Rabbit from "App/Services/Rabbit";
 
 export default class DespachosController {
 
-  async index({ view, request }: HttpContextContract) {
+  async index({ view, request, session }: HttpContextContract) {
+
+    const {matricula} = session.get('user')
 
     const {start: qsStart, end: qsEnd} = request.qs();
 
@@ -33,7 +35,7 @@ export default class DespachosController {
       .groupBy('especie')
       .select('especie')
       .count('id', 'total')
-      .where('siapeConclusao', '2997532')
+      .where('siapeConclusao', matricula)
       .whereBetween('dataConclusao', interval))
       .map(item => {
 
@@ -48,7 +50,7 @@ export default class DespachosController {
       .groupBy('especie')
       .select('especie')
       .count('id', 'total')
-      .where('siapeExigencia', '2997532')
+      .where('siapeExigencia', matricula)
       .whereBetween('primeiraExigencia', interval))
       .map(item => {
 

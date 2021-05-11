@@ -1,1 +1,0 @@
-(()=>{var e=new bootstrap.Modal(document.getElementById("modal-edit-especie")),t=document.getElementById("inputEspecieNome"),n=document.getElementById("inputEspeciePontos");VMasker(n).maskMoney(),window.openEditEspecie=function(o){t.value=o,n.value="0,00",e.show()}})();
