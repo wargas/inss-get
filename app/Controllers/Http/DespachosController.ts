@@ -4,6 +4,8 @@ import Database from "@ioc:Adonis/Lucid/Database"
 import { DateTime } from "luxon"
 import HtmlToJson from "App/Workers/HtmlToJson";
 import Rabbit from "App/Services/Rabbit";
+import Meta from 'App/Services/Meta';
+import feriados from '../../../resources/data/feriados.json';
 
 export default class DespachosController {
 
@@ -60,7 +62,17 @@ export default class DespachosController {
         return {...item, total, exigencias: item.total, conclusoes: 0}
       })
 
-    const tarefas = [...exigencias, ...concluidas]
+
+    const holydays = feriados.map(item => DateTime.fromSQL(item.date))
+
+    const meta = Meta
+      .setStart(start)
+      .setEnd(end)
+      .setPerDay(4.48)
+      .setHolydays(holydays)
+      .build()
+
+       const tarefas = [...exigencias, ...concluidas]
 
     const totais = tarefas.reduce((acc, item) => {
 
@@ -76,7 +88,10 @@ export default class DespachosController {
     })
 
 
-    return view.render("despachos", { tarefas, totais,
+    return view.render("despachos", {
+        meta,
+        tarefas,
+        totais,
         start: start.toFormat('dd/MM/yyyy'),
         end: end.toFormat('dd/MM/yyyy')  })
   }

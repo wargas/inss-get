@@ -1,1 +1,0 @@
-Array.from(document.querySelectorAll(".date")).forEach((function(e){new Datepicker(e,{format:"dd/mm/yyyy",autohide:!0}),console.log(e)}));

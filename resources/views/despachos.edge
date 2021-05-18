@@ -33,6 +33,10 @@
           </tr>
         </thead>
         <tbody>
+          <tr>
+            <td class="fw-bold" colspan="3">META</td>
+            <td class="text-end fw-bold">{{meta.toFixed(2)}}</td>
+          </tr>
           @each(item in tarefas)
             <tr>
               <td>{{item.especie}}</td>
@@ -46,6 +50,10 @@
             <td class="text-end fw-bold">{{String(totais.conclusoes).padStart(3, '0')}}</td>
             <td class="text-end fw-bold">{{String(totais.exigencias).padStart(3, '0')}}</td>
             <td class="text-end fw-bold">{{totais.total.toFixed(2)}}</td>
+          </tr>
+          <tr class="fw-bold">
+            <td colspan="3">Saldo</td>
+            <td class="text-end fw-bold">{{(meta - totais.total).toFixed(2)}}</td>
           </tr>
         </tbody>
       </table>
