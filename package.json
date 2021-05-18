@@ -5,7 +5,8 @@
   "scripts": {
     "build": "node ace build --production",
     "start": "node server.js",
-    "dev": "node ace serve --watch"
+    "dev": "node ace serve --watch",
+    "docker": "yarn install && node ace build --production && cp .env ./build/.env && node build/server.js"
   },
   "devDependencies": {
     "@adonisjs/assembler": "^5.0.0",
