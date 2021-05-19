@@ -6,17 +6,24 @@
   <h2>Relatório de Pontos</h2>
   <div class="card shadow-sm">
     <form action="./" method="get">
-      <div class="card-body d-flex border-bottom">
+      <div class="card-body d-flex align-items-center border-bottom">
+        <div class="flex-grow-1 me-3">
+          <span class="fs-3">{{(total.geral / meta * 100).toFixed(1)}}%</span>
+          <span class="text-muted">meta para o período</span>
+          <div class="progress" style="height: 5px">
+            <div class="progress-bar bg-dark" style="width: {{(total.geral / meta * 100).toFixed(1)}}%" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+        </div>
         <div class="ms-auto">
-          <label for="">Inicio</label>
+          {{--  <label for="">Inicio</label>  --}}
           <input name="start" value="{{start}}" id="start" type="text" class="form-control date">
         </div>
         <div class="ms-3">
-          <label for="">Fim</label>
+          {{--  <label for="">Fim</label>  --}}
           <input name="end" value="{{end}}" id="end" type="text" class="form-control date">
         </div>
-        <div class="ms-3 d-flex align-items-end">
-          <button type="submit" class="btn btn-outline-info">
+        <div class="ms-3">
+          <button type="submit" class="btn btn-outline-dark">
             <i class="bi bi-search"></i>
           </button>
         </div>
@@ -37,23 +44,21 @@
             <td class="fw-bold" colspan="3">META</td>
             <td class="text-end fw-bold">{{meta.toFixed(2)}}</td>
           </tr>
-          @each(item in tarefas)
+          <tr class="fw-bold">
+            <td colspan="3">TOTAL</td>
+            <td class="text-end fw-bold">{{total.geral.toFixed(2)}}</td>
+          </tr>
+          @each(item in especies)
             <tr>
-              <td>{{item.especie}}</td>
-              <td class="text-end">{{String(item.conclusoes).padStart(3, '0')}}</td>
-              <td class="text-end">{{String(item.exigencias).padStart(3, '0')}}</td>
-              <td class="text-end">{{item.total.toFixed(2)}}</td>
+              <td class="fw-light text-muted ps-5 fs-6">{{item.especie}}</td>
+              <td class="text-end fw-light text-muted fs-6">{{String(item.concluidas).padStart(3, '0')}}</td>
+              <td class="text-end fw-light text-muted fs-6">{{String(item.exigencias).padStart(3, '0')}}</td>
+              <td class="text-end fw-light text-muted fs-6">{{item.pontos.toFixed(2)}}</td>
             </tr>
           @endeach
           <tr class="fw-bold">
-            <td>Total</td>
-            <td class="text-end fw-bold">{{String(totais.conclusoes).padStart(3, '0')}}</td>
-            <td class="text-end fw-bold">{{String(totais.exigencias).padStart(3, '0')}}</td>
-            <td class="text-end fw-bold">{{totais.total.toFixed(2)}}</td>
-          </tr>
-          <tr class="fw-bold">
-            <td colspan="3">Saldo</td>
-            <td class="text-end fw-bold">{{(meta - totais.total).toFixed(2)}}</td>
+            <td colspan="3">SALDO</td>
+            <td class="text-end fw-bold">{{(meta - total.geral).toFixed(2)}}</td>
           </tr>
         </tbody>
       </table>
