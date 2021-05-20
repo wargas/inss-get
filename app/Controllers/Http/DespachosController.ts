@@ -87,7 +87,6 @@ export default class DespachosController {
         current = mapTarefas.get(item.especie)
       }
 
-      console.log(current)
 
       mapTarefas.set(item.especie, {
         concluidas: current.concluidas + (item.conclusao ? 1 : 0),
@@ -121,6 +120,7 @@ export default class DespachosController {
       .build()
 
     return view.render("despachos", {
+        hoje: DateTime.local(),
         meta,
         especies,
         total,

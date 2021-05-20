@@ -3,76 +3,95 @@
 
 @section('content')
 
-  <h2>Relatório de Pontos</h2>
-  <div class="card shadow-sm">
-    <form action="./" method="get">
-      <div class="card-body d-flex align-items-center border-bottom">
-        <div class="flex-grow-1 me-3">
-          <span class="fs-3">{{(total.geral / meta * 100).toFixed(1)}}%</span>
-          <span class="text-muted">meta para o período</span>
-          <div class="progress" style="height: 5px">
-            <div class="progress-bar bg-dark" style="width: {{(total.geral / meta * 100).toFixed(1)}}%" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-          </div>
+<h2>Relatório de Pontos</h2>
+<div class="card shadow-sm">
+  <form action="./" method="get">
+    <div class="card-body d-flex align-items-center border-bottom">
+
+      <div class="d-flex flex-grow-1 me-3">
+        <div>
+          <span class="fs-4 fw-bold">{{(total.geral / meta * 100).toFixed(1)}}%</span> <br />
         </div>
-        <div class="ms-auto">
-          {{--  <label for="">Inicio</label>  --}}
-          <input name="start" value="{{start}}" id="start" type="text" class="form-control date">
-        </div>
-        <div class="ms-3">
-          {{--  <label for="">Fim</label>  --}}
-          <input name="end" value="{{end}}" id="end" type="text" class="form-control date">
-        </div>
-        <div class="ms-3">
-          <button type="submit" class="btn btn-outline-dark">
-            <i class="bi bi-search"></i>
-          </button>
-        </div>
+        <ul class="nav ms-auto align-items-center">
+          <li class="nav-item">
+            <a href="?start={{hoje.toFormat('dd/MM/y')}}&end={{hoje.toFormat('dd/MM/y')}}"
+            class="nav-link fw-bold text-dark">Hoje</a>
+          </li>
+          <li class="nav-item">
+            <a href="?start={{hoje.startOf('month').toFormat('dd/MM/y')}}&end={{hoje.endOf('month').toFormat('dd/MM/y')}}"
+              class="nav-link fw-bold text-dark">Mês</a>
+          </li>
+          <li class="nav-item">
+            <a href="?start={{hoje.startOf('week').minus({day: 1}).toFormat('dd/MM/y')}}&end={{hoje.endOf('week').minus({day: 1}).toFormat('dd/MM/y')}}"
+              class="nav-link fw-bold text-dark">Semana</a>
+          </li>
+        </ul>
       </div>
-  </form>
-    <div class="card-body p-0">
-      <table class="table m-0">
-        <thead>
-          <tr>
-            <th>Especie</th>
-            <th class="text-end">Conclusões</th>
-            <th class="text-end">Exigências</th>
-            <th class="text-end">Pontos</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="fw-bold" colspan="3">META</td>
-            <td class="text-end fw-bold">{{meta.toFixed(2)}}</td>
-          </tr>
-          <tr class="fw-bold">
-            <td colspan="3">TOTAL</td>
-            <td class="text-end fw-bold">{{total.geral.toFixed(2)}}</td>
-          </tr>
-          @each(item in especies)
-            <tr>
-              <td class="fw-light text-muted ps-5 fs-6">{{item.especie}}</td>
-              <td class="text-end fw-light text-muted fs-6">{{String(item.concluidas).padStart(3, '0')}}</td>
-              <td class="text-end fw-light text-muted fs-6">{{String(item.exigencias).padStart(3, '0')}}</td>
-              <td class="text-end fw-light text-muted fs-6">{{item.pontos.toFixed(2)}}</td>
-            </tr>
-          @endeach
-          <tr class="fw-bold">
-            <td colspan="3">SALDO</td>
-            <td class="text-end fw-bold">{{(meta - total.geral).toFixed(2)}}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="ms-auto">
+        {{-- <label for="">Inicio</label> --}}
+        <input name="start" value="{{start}}" id="start" type="text" class="form-control date">
+      </div>
+      <div class="ms-3">
+        {{-- <label for="">Fim</label> --}}
+        <input name="end" value="{{end}}" id="end" type="text" class="form-control date">
+      </div>
+      <div class="ms-3">
+        <button type="submit" class="btn btn-outline-dark">
+          <i class="bi bi-search"></i>
+        </button>
+      </div>
     </div>
+    <div class="card-body p-0 ">
+      <div class="progress rounded-0" style="height: 2px">
+        <div class="progress-bar bg-success" style="width: {{(total.geral / meta * 100).toFixed(1)}}%" role="progressbar"
+          aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
+    </div>
+  </form>
+  <div class="card-body p-0">
+    <table class="table m-0 table-borderless table-striped">
+      <thead>
+        <tr class="border-bottom">
+          <th>Especie</th>
+          <th class="text-end">Conclusões</th>
+          <th class="text-end">Exigências</th>
+          <th class="text-end">Pontos</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="fw-bold" colspan="3">META</td>
+          <td class="text-end fw-bold">{{meta.toFixed(2)}}</td>
+        </tr>
+        <tr class="fw-bold">
+          <td colspan="3">TOTAL</td>
+          <td class="text-end fw-bold">{{total.geral.toFixed(2)}}</td>
+        </tr>
+        @each(item in especies)
+        <tr>
+          <td class="fw-light text-muted ps-5 fs-6">{{item.especie}}</td>
+          <td class="text-end fw-light text-muted fs-6">{{String(item.concluidas).padStart(3, '0')}}</td>
+          <td class="text-end fw-light text-muted fs-6">{{String(item.exigencias).padStart(3, '0')}}</td>
+          <td class="text-end fw-light text-muted fs-6">{{item.pontos.toFixed(2)}}</td>
+        </tr>
+        @endeach
+        <tr class="fw-bold bg-light border-top">
+          <td colspan="3">SALDO</td>
+          <td class="text-end fw-bold">{{(meta - total.geral).toFixed(2)}}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
+</div>
 
 @end
 @section('js')
-  <script>
-    const inputStart = document.getElementById('start')
-    const inputEnd = document.getElementById('end')
+<script>
+  const inputStart = document.getElementById('start')
+  const inputEnd = document.getElementById('end')
 
-    VMasker(inputStart).maskPattern('99/99/9999')
-    VMasker(inputEnd).maskPattern('99/99/9999')
+  VMasker(inputStart).maskPattern('99/99/9999')
+  VMasker(inputEnd).maskPattern('99/99/9999')
 
-  </script>
+</script>
 @end
