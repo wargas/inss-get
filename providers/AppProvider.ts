@@ -1,6 +1,5 @@
 import { ApplicationContract } from '@ioc:Adonis/Core/Application'
 import Rabbit from 'App/Services/Rabbit'
-import { despachos } from 'App/Workers/HtmlToJson'
 import InsertDespachos from 'App/Workers/InsertDespachos'
 import SalvarTarefa from 'App/Workers/SalvarTarefa'
 
