@@ -13,14 +13,22 @@ export default async function name(msg: Message, channel: Channel) {
 
       await Database.from('tarefas')
         .where('protocolo', protocolo)
-        .update(data)
+        .update({
+          ...data,
+          despachos: JSON.stringify(despachos),
+          adicionais: JSON.stringify(adicionais)
+        })
 
     } else {
       const { despachos, adicionais, ...data } = tarefa
-      await Database.table('tarefas').insert(data)
+      await Database.table('tarefas').insert({
+        ...data,
+        despachos: JSON.stringify(despachos),
+        adicionais: JSON.stringify(adicionais)
+      })
     }
 
-    console.log('receive msg')
+    console.log(`receive msg ${tarefa.protocolo}`)
 
     channel.ack(msg)
   } catch (error) {
