@@ -74,6 +74,7 @@ export default class DespachosController {
       return item;
     })
 
+
     const mapTarefas = new Map<string, any>()
 
     tarefas.forEach(item => {

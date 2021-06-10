@@ -7,7 +7,6 @@ export default async function name(msg: Message, channel: Channel) {
   const existe = await (await Database.from('tarefas').where('protocolo', tarefa.protocolo)).length
   try {
 
-
     if (existe > 0) {
       const { despachos, adicionais, protocolo, ...data } = tarefa
 

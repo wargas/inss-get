@@ -1,5 +1,5 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import FazerLogin from 'App/Workers/FazerLogin'
+
 
 export default class AuthController {
 
@@ -11,9 +11,19 @@ export default class AuthController {
   }
 
 
-  async doLogin({request, response, session}: HttpContextContract) {
-    const {uid, password} = request.body()
-    const user = await FazerLogin(uid, password)
+  async doLogin({response, session}: HttpContextContract) {
+    // const {uid, password} = request.body()
+    const user = {
+      identificador: "",
+      email: "wargas.teixeira@inss.gov.br",
+      emailParticular: "wargas.teixeira@gmail.com",
+      nome: "Wargas Teixeira",
+      cidade: "Cabrobo/PE",
+      telefone: "",
+      cpf: "089.488.424-71",
+      nit: "",
+      matricula: "2997532",
+    }
 
 
     if(!user) {
